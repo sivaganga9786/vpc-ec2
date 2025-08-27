@@ -23,16 +23,3 @@ module "ec2" {
     #file("${path.module}/ansible.sh")
   ]
 }
-
-
-
-module "ec2" {
-  source        = "git::https://github.com/sivaganga9786/Terraform-foundation.git//terraform-modules/ec2"
-  instances     = var.instances
-  subnet_id     = module.vpc.public_subnets[0]
-  key_name      = var.key_name
-  ec2_sg_name   = var.ec2_sg_name
-  volume_size   = var.volume_size
-  vpc_id        = module.vpc.vpc_id
-  user_data     = [file("${path.module}/build.sh")]
-}
