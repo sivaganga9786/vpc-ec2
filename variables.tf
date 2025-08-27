@@ -32,7 +32,7 @@ variable "instances" {
     role          = string
   }))
 }
-variable "private_subnet_cidr" {}
+variable "private_subnet_cidrs" {}
 variable "ec2_sg_name" {
   description = "The name of the EC2 security group"
   type        = string
