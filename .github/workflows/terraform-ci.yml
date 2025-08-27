@@ -2,9 +2,9 @@ name: Create VPC with EC2 Instances
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
 
 jobs:
   terraform:
@@ -37,8 +37,7 @@ jobs:
 
 
       - name: Terraform Init
-        run: |
-            cd vpc-multi-ec2
+        run: 
             terraform init
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
@@ -47,7 +46,6 @@ jobs:
 
       - name: Terraform Plan
         run: |
-              cd vpc-multi-ec2
               terraform plan \
                 -var="access_key=${{ secrets.ACCESS_KEY }}" \
                 -var="secret_key=${{ secrets.SECRET_KEY }}" \
@@ -59,7 +57,6 @@ jobs:
     
       - name: Terraform Apply
         run: |
-              cd vpc-multi-ec2
               terraform apply -auto-approve \
                 -var="access_key=${{ secrets.ACCESS_KEY }}" \
                 -var="secret_key=${{ secrets.SECRET_KEY }}" \
