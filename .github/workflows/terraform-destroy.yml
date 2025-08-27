@@ -1,0 +1,41 @@
+name: Terraform Destroy
+
+on:
+  workflow_dispatch:   # This lets you manually trigger the destroy from GitHub UI
+
+jobs:
+  terraform-destroy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: AWS Authentication Check
+        run: aws sts get-caller-identity
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_KEY }}
+          AWS_REGION: us-east-1
+
+      - name: Terraform Init
+        run: |
+          terraform init -input=false -reconfigure
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_KEY }}
+          AWS_REGION: us-east-1
+
+      - name: Terraform Destroy
+        run: |
+          terraform destroy -auto-approve \
+            -var="access_key=${{ secrets.ACCESS_KEY }}" \
+            -var="secret_key=${{ secrets.SECRET_KEY }}" \
+            -var="region=us-east-1"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_KEY }}
+          AWS_REGION: us-east-1
+
